@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://camel.apache.org/schema/spring
+           http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="activeMQConfig" class="impl.ActiveMQConfig">
+        <property name="brokerURL" value="${activemq.brokerURL}"/>
+        <property name="username" value="${activemq.username}"/>
+        <property name="password" value="${activemq.password}"/>
+        <property name="queue" value="${activemq.queue}"/>
+    </bean>
+
+    <bean id="rabbitMQConfig" class="impl.RabbitMQConfig">
+        <property name="hostname" value="${rabbit.hostname}"/>
+        <property name="portNumber" value="${rabbit.portNumber}"/>
+        <property name="username" value="${rabbit.username}"/>
+        <property name="password" value="${rabbit.password}"/>
+        <property name="queue" value="${rabbit.queue}"/>
+    </bean>
+    <bean id="routeBuilder" class="impl.CamelRouteBuilder">
+        <property name="activeMQConfig" ref="activeMQConfig"/>
+        <property name="rabbitMQConfig" ref="rabbitMQConfig"/>
+    </bean>
+
+    <context:property-placeholder ignore-resource-not-found="true" location="classpath:fuse-bundle.properties"/>
+
+    <!-- Camel context -->
+    <camel:camelContext id="setTrainOpCamelContext" xmlns="http://camel.apache.org/schema/spring">
+        <routeBuilder ref="routeBuilder"/>
+    </camel:camelContext>
+
+
+</beans>
