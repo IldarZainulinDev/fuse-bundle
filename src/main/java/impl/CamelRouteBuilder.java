@@ -9,8 +9,6 @@ public class CamelRouteBuilder extends RouteBuilder {
 
     private ActiveMQConfig activeMQConfig;
 
-    private static int i = 0;
-
     public void setRabbitMQConfig(RabbitMQConfig rabbitMQConfig) {
         this.rabbitMQConfig = rabbitMQConfig;
     }
